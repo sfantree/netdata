@@ -1,12 +1,27 @@
-name: debugger-action
+name: example-frp-go-v1
 on:
-  push:
-    branches:
-      - master
+  workflow_dispatch:
+
 jobs:
   build:
+    name: Go Development
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup Debug Session
-        uses: csexton/debugger-action@master
+
+    - name: Set up Go 1.18
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.18
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+
+    - uses: shaowenchen/debugger-action@v1
+      name: debugger
+      timeout-minutes: 30
+      continue-on-error: true
+      with:
+        frp_server_addr: ${{ secrets.FRP_SERVER_ADDR }}
+        frp_server_port: ${{ secrets.FRP_SERVER_PORT }}
+        frp_token: ${{ secrets.FRP_TOKEN }}
+        ssh_port: ${{ secrets.SSH_PORT }}
