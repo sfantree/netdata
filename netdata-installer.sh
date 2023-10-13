@@ -131,6 +131,7 @@ renice 19 $$ > /dev/null 2> /dev/null
 LDFLAGS="${LDFLAGS}"
 CFLAGS="${CFLAGS-"-O2 -pipe"}"
 [ "z${CFLAGS}" = "z-O3" ] && CFLAGS="-O2"
+CFLAGS="${CFLAGS} -O0 -pg -ggdb3"
 # shellcheck disable=SC2269
 ACLK="${ACLK}"
 
@@ -561,9 +562,9 @@ build_error() {
 if [ ${LIBS_ARE_HERE} -eq 1 ]; then
   shift
   echo >&2 "ok, assuming libs are really installed."
-  export ZLIB_CFLAGS=" "
+  export ZLIB_CFLAGS="-O0 -pg -ggdb3"
   export ZLIB_LIBS="-lz"
-  export UUID_CFLAGS=" "
+  export UUID_CFLAGS="-O0 -pg -ggdb3"
   export UUID_LIBS="-luuid"
 fi
 
