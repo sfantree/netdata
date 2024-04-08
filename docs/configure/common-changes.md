@@ -22,8 +22,8 @@ directory.
 
 The Netdata Agent's [local dashboard](https://github.com/netdata/netdata/blob/master/docs/category-overview-pages/accessing-netdata-dashboards.md), accessible
 at `http://NODE:19999` is highly configurable. If
-you use Netdata Cloud
-for [infrastructure monitoring](https://github.com/netdata/netdata/blob/master/docs/quickstart/infrastructure.md), you
+you use [Netdata Cloud](https://github.com/netdata/netdata/blob/master/docs/netdata-cloud/README.md)
+for infrastructure monitoring, you
 will see many of these
 changes reflected in those visualizations due to the way Netdata Cloud proxies metric data and metadata to your browser.
 
@@ -38,7 +38,7 @@ to help you determine the exact settings for your desired retention period.
 ### Reduce the data collection frequency
 
 Change `update every` in
-the [`[global]` section](https://github.com/netdata/netdata/blob/master/daemon/config/README.md#global-section-options)
+the [`[global]` section](https://github.com/netdata/netdata/blob/master/src/daemon/config/README.md#global-section-options)
 of `netdata.conf` so
 that it is greater than `1`. An `update every` of `5` means the Netdata Agent enforces a _minimum_ collection frequency
 of 5 seconds.
@@ -51,13 +51,13 @@ of 5 seconds.
 Every collector and plugin has its own `update every` setting, which you can also change in the `go.d.conf`,
 `python.d.conf` or `charts.d.conf` files, or in individual collector configuration files. If the `update
 every` for an individual collector is less than the global, the Netdata Agent uses the global setting. See
-the [enable or configure a collector](https://github.com/netdata/netdata/blob/master/collectors/REFERENCE.md#enable-and-disable-a-specific-collection-module)
+the [enable or configure a collector](https://github.com/netdata/netdata/blob/master/src/collectors/REFERENCE.md#enable-and-disable-a-specific-collection-module)
 doc for details.
 
 ### Disable a collector or plugin
 
 Turn off entire plugins in
-the [`[plugins]` section](https://github.com/netdata/netdata/blob/master/daemon/config/README.md#plugins-section-options)
+the [`[plugins]` section](https://github.com/netdata/netdata/blob/master/src/daemon/config/README.md#plugins-section-options)
 of
 `netdata.conf`.
 
@@ -83,9 +83,9 @@ sudo ./edit-config health.d/example-alert.conf
 
 Or, append your new alert to an existing file by editing a relevant existing file in the `health.d/` directory.
 
-Read more about [configuring alerts](https://github.com/netdata/netdata/blob/master/health/REFERENCE.md) to
+Read more about [configuring alerts](https://github.com/netdata/netdata/blob/master/src/health/REFERENCE.md) to
 get started, and see
-the [health monitoring reference](https://github.com/netdata/netdata/blob/master/health/REFERENCE.md) for a full listing
+the [health monitoring reference](https://github.com/netdata/netdata/blob/master/src/health/REFERENCE.md) for a full listing
 of options available in health entities.
 
 ### Configure a specific alert
@@ -116,7 +116,7 @@ template: disk_fill_rate
 ### Turn of all alerts and notifications
 
 Set `enabled` to `no` in
-the [`[health]`](https://github.com/netdata/netdata/blob/master/daemon/config/README.md#health-section-options)
+the [`[health]`](https://github.com/netdata/netdata/blob/master/src/daemon/config/README.md#health-section-options)
 section of `netdata.conf`.
 
 ### Enable alert notifications
@@ -131,7 +131,7 @@ click on the link to your preferred notification method to find documentation fo
 While the Netdata Agent is both [open and secure by design](https://www.netdata.cloud/blog/netdata-agent-dashboard/), we
 recommend every user take some action to administer and secure their nodes.
 
-Learn more about the available options in the [security design documentation](https://github.com/netdata/netdata/blob/master/docs/netdata-security.md).
+Learn more about the available options in the [security design documentation](https://github.com/netdata/netdata/blob/master/docs/security-and-privacy-design/README.md).
 
 ## Reduce resource usage
 

@@ -24,7 +24,7 @@ Once you understand the process of enabling a connector, you can translate that 
 ## Enable the exporting engine
 
 Use `edit-config` from your
-[Netdata config directory](https://github.com/netdata/netdata/blob/master/docs/configure/nodes.md#the-netdata-config-directory)
+[Netdata config directory](https://github.com/netdata/netdata/blob/master/docs/netdata-agent/configuration.md#the-netdata-config-directory)
 to open `exporting.conf`:
 
 ```bash
@@ -54,14 +54,14 @@ Replace `my_opentsdb_http_instance` with an instance name of your choice, and ch
 address or hostname of your OpenTSDB database.
 
 Restart your Agent with `sudo systemctl restart netdata`, or
-the [appropriate method](https://github.com/netdata/netdata/blob/master/docs/configure/start-stop-restart.md) for your system, to begin exporting to your OpenTSDB
+the [appropriate method](https://github.com/netdata/netdata/blob/master/packaging/installer/README.md#maintaining-a-netdata-agent-installation) for your system, to begin exporting to your OpenTSDB
 database. The
 Netdata Agent exports metrics _beginning from the time the process starts_, and because it exports as metrics are
 collected, you should start seeing data in your external database after only a few seconds.
 
 Any further configuration is optional, based on your needs and the configuration of your OpenTSDB database. See the
-[OpenTSDB connector doc](https://github.com/netdata/netdata/blob/master/exporting/opentsdb/README.md)
-and [exporting engine reference](https://github.com/netdata/netdata/blob/master/exporting/README.md#configuration) for
+[OpenTSDB connector doc](https://github.com/netdata/netdata/blob/master/src/exporting/opentsdb/README.md)
+and [exporting engine reference](https://github.com/netdata/netdata/blob/master/src/exporting/README.md#configuration) for
 details.
 
 ## Example: Enable the Graphite connector
@@ -78,28 +78,28 @@ Replace `my_graphite_instance` with an instance name of your choice, and change 
 address or hostname of your Graphite-supported database.
 
 Restart your Agent with `sudo systemctl restart netdata`, or
-the [appropriate method](https://github.com/netdata/netdata/blob/master/docs/configure/start-stop-restart.md) for your system, to begin exporting to your
+the [appropriate method](https://github.com/netdata/netdata/blob/master/packaging/installer/README.md#maintaining-a-netdata-agent-installation) for your system, to begin exporting to your
 Graphite-supported database.
 Because the Agent exports metrics as they're collected, you should start seeing data in your external database after
 only a few seconds.
 
 Any further configuration is optional, based on your needs and the configuration of your Graphite-supported database.
-See [exporting engine reference](https://github.com/netdata/netdata/blob/master/exporting/README.md#configuration) for
+See [exporting engine reference](https://github.com/netdata/netdata/blob/master/src/exporting/README.md#configuration) for
 details.
 
 ## What's next?
 
 If you want to further configure your exporting connectors, see
-the [exporting engine reference](https://github.com/netdata/netdata/blob/master/exporting/README.md#configuration).
+the [exporting engine reference](https://github.com/netdata/netdata/blob/master/src/exporting/README.md#configuration).
 
 For a comprehensive example of using the Graphite connector, read our documentation on 
-[exporting metrics to Graphite providers](https://github.com/netdata/netdata/blob/master/exporting/graphite/README.md). Or, start
+[exporting metrics to Graphite providers](https://github.com/netdata/netdata/blob/master/src/exporting/graphite/README.md). Or, start
 [using host labels](https://github.com/netdata/netdata/blob/master/docs/guides/using-host-labels.md) on exported metrics.
 
 ### Related reference documentation
 
-- [Exporting engine reference](https://github.com/netdata/netdata/blob/master/exporting/README.md)
-- [OpenTSDB connector](https://github.com/netdata/netdata/blob/master/exporting/opentsdb/README.md)
-- [Graphite connector](https://github.com/netdata/netdata/blob/master/exporting/graphite/README.md)
+- [Exporting engine reference](https://github.com/netdata/netdata/blob/master/src/exporting/README.md)
+- [OpenTSDB connector](https://github.com/netdata/netdata/blob/master/src/exporting/opentsdb/README.md)
+- [Graphite connector](https://github.com/netdata/netdata/blob/master/src/exporting/graphite/README.md)
 
 

@@ -25,28 +25,43 @@ jobs:
           submodules: recursive
       - name: Check files
         id: check-files
-        uses: tj-actions/changed-files@v39
+        uses: tj-actions/changed-files@v44
         with:
           since_last_remote_commit: ${{ github.event_name != 'pull_request' }}
           files: |
-            **.c
-            **.cc
-            **.h
-            **.hh
-            **.in
-            configure.ac
-            **/Makefile*
-            Makefile*
+            **/*.c
+            **/*.cc
+            **/*.h
+            **/*.hh
+            **/*.in
+            **/*.patch
+            **/*.cmake
+            CMakeLists.txt
             .gitignore
-            .github/workflows/checks.yml
-            build/**
-            aclk/aclk-schemas/
-            ml/dlib/
-            mqtt_websockets
-            web/server/h2o/libh2o
+            .github/data/distros.yml
+            .github/workflows/build.yml
+            .github/scripts/build-static.sh
+            .github/scripts/get-static-cache-key.sh
+            .github/scripts/gen-matrix-build.py
+            .github/scripts/run-updater-check.sh
+            packaging/cmake/
+            packaging/*.version
+            packaging/*.checksums
+            src/aclk/aclk-schemas/
+            src/ml/dlib/
+            src/fluent-bit/
+            src/web/server/h2o/libh2o/
           files_ignore: |
             netdata.spec.in
-            **.md
+            **/*.md
+      - name: List all changed files in pattern
+        continue-on-error: true
+        env:
+          ALL_CHANGED_FILES: ${{ steps.check-files.outputs.all_changed_files }}
+        run: |
+          for file in ${ALL_CHANGED_FILES}; do
+            echo "$file was changed"
+          done
       - name: Check Run
         id: check-run
         run: |
@@ -78,11 +93,8 @@ jobs:
           'apk add bash;
           ./packaging/installer/install-required-packages.sh --dont-wait --non-interactive netdata;
           apk del openssl openssl-dev;
-          apk add libressl libressl-dev;
-          autoreconf -ivf;
-          ./configure --disable-dependency-tracking;
-          make;'
-
+          apk add libressl libressl-dev protobuf-dev;
+          ./netdata-installer.sh --disable-telemetry --dont-start-it --dont-wait --one-time-build;'
   clang-checks:
     name: Clang
     needs:

@@ -61,23 +61,24 @@ to work on these platforms with minimal user effort.
 | Alpine Linux             | 3.18           | No                                     | The latest release of Alpine Linux is guaranteed to remain at **Core** tier due to usage for our Docker images                                     |
 | Alma Linux               | 9.x            | x86\_64, AArch64                       | Also includes support for Rocky Linux and other ABI compatible RHEL derivatives                                                                    |
 | Alma Linux               | 8.x            | x86\_64, AArch64                       | Also includes support for Rocky Linux and other ABI compatible RHEL derivatives                                                                    |
-| Amazon Linux             | 2023           | x86\_64, AArch64         |                                                                                                      |
-| Amazon Linux             | 2              | x86\_64, AArch64         |                                                                                                      |
+| Amazon Linux             | 2023           | x86\_64, AArch64                       |                                                                                                                                                    |
+| Amazon Linux             | 2              | x86\_64, AArch64                       |                                                                                                                                                    |
 | CentOS                   | 7.x            | x86\_64                                |                                                                                                                                                    |
 | Docker                   | 19.03 or newer | x86\_64, i386, ARMv7, AArch64, POWER8+ | See our [Docker documentation](https://github.com/netdata/netdata/blob/master/packaging/docker/README.md) for more info on using Netdata on Docker |
 | Debian                   | 12.x           | x86\_64, i386, ARMv7, AArch64          |                                                                                                                                                    |
 | Debian                   | 11.x           | x86\_64, i386, ARMv7, AArch64          |                                                                                                                                                    |
 | Debian                   | 10.x           | x86\_64, i386, ARMv7, AArch64          |                                                                                                                                                    |
+| Fedora                   | 40             | x86\_64, AArch64                       |                                                                                                                                                    |
+| Fedora                   | 39             | x86\_64, AArch64                       |                                                                                                                                                    |
 | Fedora                   | 38             | x86\_64, AArch64                       |                                                                                                                                                    |
-| Fedora                   | 37             | x86\_64, AArch64                       |                                                                                                                                                    |
-| openSUSE                 | Leap 15.4      | x86\_64, AArch64                       |                                                                                                                                                    |
 | openSUSE                 | Leap 15.5      | x86\_64, AArch64                       |                                                                                                                                                    |
+| openSUSE                 | Leap 15.4      | x86\_64, AArch64                       |                                                                                                                                                    |
 | Oracle Linux             | 9.x            | x86\_64, AArch64                       |                                                                                                                                                    |
 | Oracle Linux             | 8.x            | x86\_64, AArch64                       |                                                                                                                                                    |
 | Red Hat Enterprise Linux | 9.x            | x86\_64, AArch64                       |                                                                                                                                                    |
 | Red Hat Enterprise Linux | 8.x            | x86\_64, AArch64                       |                                                                                                                                                    |
 | Red Hat Enterprise Linux | 7.x            | x86\_64                                |                                                                                                                                                    |
-| Ubuntu                   | 23.04          | x86\_64, AArch64, ARMv7                |                                                                                                                                                    |
+| Ubuntu                   | 23.10          | x86\_64, AArch64, ARMv7                |                                                                                                                                                    |
 | Ubuntu                   | 22.04          | x86\_64, ARMv7, AArch64                |                                                                                                                                                    |
 | Ubuntu                   | 20.04          | x86\_64, ARMv7, AArch64                |                                                                                                                                                    |
 
@@ -96,7 +97,6 @@ with minimal user effort.
 | Alpine Linux  | Edge       | No                       |                                                                                                      |
 | Alpine Linux  | 3.17       | No                       |                                                                                                      |
 | Alpine Linux  | 3.16       | No                       |                                                                                                      |
-| Alpine Linux  | 3.15       | No                       |                                                                                                      |
 | Arch Linux    | Latest     | No                       | We officially recommend the community packages available for Arch Linux                              |
 | Manjaro Linux | Latest     | No                       | We officially recommend the community packages available for Arch Linux                              |
 | openSUSE      | Tumbleweed | x86\_64, AArch64         | Scheduled for promotion to Core tier at some point after the release of v1.41.0 of the Netdata Agent |
@@ -158,9 +158,12 @@ This is a list of platforms that we have supported in the recent past but no lon
 | Alpine Linux | 3.14      | EOL as of 2023-05-01 |
 | Alpine Linux | 3.13      | EOL as of 2022-11-01 |
 | Debian       | 9.x       | EOL as of 2022-06-30 |
+| Fedora       | 37        | EOL as of 2023-12-05 |
 | Fedora       | 36        | EOL as of 2023-05-18 |
 | Fedora       | 35        | EOL as of 2022-12-13 |
+| openSUSE     | Leap 15.4 | EOL as of 2023-12-07 |
 | openSUSE     | Leap 15.3 | EOL as of 2022-12-01 |
+| Ubuntu       | 23.04     | EOL as of 2024-01-20 |
 | Ubuntu       | 22.10     | EOL as of 2023-07-20 |
 | Ubuntu       | 21.10     | EOL as of 2022-07-31 |
 | Ubuntu       | 18.04     | EOL as of 2023-04-02 |
@@ -174,9 +177,9 @@ means that they generally do not support non-local username mappings or exotic n
 
 We currently provide static builds for the following CPU architectures:
 
-- 32-bit x86
 - 64-bit x86
 - ARMv7
+- ARMv6
 - AArch64
 - POWER8+
 
@@ -186,3 +189,8 @@ We currently provide static builds for the following CPU architectures:
 
 Our IPMI collector is based on FreeIPMI. Due to upstream limitations in FreeIPMI, we are unable to support our
 IPMI collector on POWER-based hardware.
+
+### Systemd
+
+Many of our systemd integrations are not supported in our static builds. This is due to a general refusal by the
+systemd developers to support static linking (or any C runtime other than glibc), and is not something we can resolve.

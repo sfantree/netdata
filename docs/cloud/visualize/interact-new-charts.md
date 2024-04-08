@@ -42,8 +42,8 @@ With a quick glance you have immediate information available at your disposal:
 While Netdata's charts require no configuration and are easy to interact with, they have a lot of underlying complexity. To meaningfully organize charts out of the box based on what's happening in your nodes, Netdata uses the concepts of [dimensions](#dimensions), [contexts](#contexts), and [families](#families).
 
 Understanding how these work will help you more easily navigate the dashboard,
-[write new alerts](https://github.com/netdata/netdata/blob/master/health/REFERENCE.md), or play around
-with the [API](https://github.com/netdata/netdata/blob/master/web/api/README.md).
+[write new alerts](https://github.com/netdata/netdata/blob/master/src/health/REFERENCE.md), or play around
+with the [API](https://github.com/netdata/netdata/blob/master/src/web/api/README.md).
 
 ### Dimensions
 
@@ -71,7 +71,7 @@ whereas anything after the `.` is specified either by the chart's developer or b
 
 By default, a chart's type affects where it fits in the menu, while its family creates submenus.
 
-Netdata also relies on contexts for [alert configuration](https://github.com/netdata/netdata/blob/master/health/REFERENCE.md) (the [`on` line](https://github.com/netdata/netdata/blob/master/health/REFERENCE.md#alert-line-on)).
+Netdata also relies on contexts for [alert configuration](https://github.com/netdata/netdata/blob/master/src/health/REFERENCE.md) (the [`on` line](https://github.com/netdata/netdata/blob/master/src/health/REFERENCE.md#alert-line-on)).
 
 ### Families
 
@@ -262,7 +262,7 @@ By default the aggregation applied is _average_ but the user can choose differen
 - Delta
 - Single or Double exponential smoothing
 
-For more details on each, you can refer to our Agent's HTTP API details on [Data Queries - Data Grouping](https://github.com/netdata/netdata/blob/master/web/api/queries/README.md#data-grouping).
+For more details on each, you can refer to our Agent's HTTP API details on [Data Queries - Data Grouping](https://github.com/netdata/netdata/blob/master/src/web/api/queries/README.md#data-grouping).
 
 ### Reset to defaults
 
@@ -283,7 +283,7 @@ The Anomaly Rate ribbon on top of each chart visualizes the combined anomaly rat
 
 Hovering over the Anomaly Rate ribbon provides a histogram of the anomaly rates per presented dimension, for the specific point in time.  
 
-Anomaly Rate visualization does not make Netdata slower. Anomaly rate is saved in the the Netdata database, together with metric values, and due to the smart design of Netdata, it does not even incur a disk footprint penalty.
+Anomaly Rate visualization does not make Netdata slower. Anomaly rate is saved in the Netdata database, together with metric values, and due to the smart design of Netdata, it does not even incur a disk footprint penalty.
 
 ## Hover over the chart
 

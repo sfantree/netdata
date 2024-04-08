@@ -59,7 +59,7 @@ You may not need to do any more configuration to have Netdata collect your Unbou
 
 If you followed the steps above to enable `remote-control` and make your Unbound files readable by Netdata, that should
 be enough. Restart Netdata with `sudo systemctl restart netdata`, or the [appropriate
-method](https://github.com/netdata/netdata/blob/master/docs/configure/start-stop-restart.md) for your system. You should see Unbound metrics in your Netdata
+method](https://github.com/netdata/netdata/blob/master/packaging/installer/README.md#maintaining-a-netdata-agent-installation) for your system. You should see Unbound metrics in your Netdata
 dashboard!
 
 ![Some charts showing Unbound metrics in real-time](https://user-images.githubusercontent.com/1153921/69659974-93160f00-103c-11ea-88e6-27e9efcf8c0d.png)
@@ -104,13 +104,13 @@ Netdata will attempt to read `unbound.conf` to get the appropriate `address`, `c
 `tls_key` parameters. 
 
 Restart Netdata with `sudo systemctl restart netdata`, or the [appropriate
-method](https://github.com/netdata/netdata/blob/master/docs/configure/start-stop-restart.md) for your system.
+method](https://github.com/netdata/netdata/blob/master/packaging/installer/README.md#maintaining-a-netdata-agent-installation) for your system.
 
 ### Manual setup for a remote Unbound server
 
 Collecting metrics from remote Unbound servers requires manual configuration. There are too many possibilities to cover
 all remote connections here, but the [default `unbound.conf`
-file](https://github.com/netdata/go.d.plugin/blob/master/config/go.d/unbound.conf) contains a few useful examples:
+file](https://github.com/netdata/netdata/blob/master/src/go/collectors/go.d.plugin/config/go.d/unbound.conf) contains a few useful examples:
 
 ```yaml
 jobs:
@@ -132,7 +132,7 @@ jobs:
 ```
 
 To see all the available options, see the default [unbound.conf
-file](https://github.com/netdata/go.d.plugin/blob/master/config/go.d/unbound.conf).
+file](https://github.com/netdata/netdata/blob/master/src/go/collectors/go.d.plugin/config/go.d/unbound.conf).
 
 ## What's next?
 

@@ -103,8 +103,8 @@ two different SSH keys supplied by AWS.
 
 ### Edit the `vars/main.yml` file
 
-In order to connect your node(s) to your Space in Netdata Cloud, and see all their metrics in real-time in [composite
-charts](https://github.com/netdata/netdata/blob/master/docs/visualize/overview-infrastructure.md) or perform [Metric
+In order to connect your node(s) to your Space in Netdata Cloud, and see all their metrics in real-time in composite
+charts or perform [Metric
 Correlations](https://github.com/netdata/netdata/blob/master/docs/cloud/insights/metric-correlations.md), you need to set the `claim_token`
 and `claim_room` variables.
 
@@ -130,7 +130,7 @@ hostname of the node, the playbook disables that local dashboard by setting `web
 security boost by not allowing any unwanted access to the local dashboard.
 
 You can read more about this decision, or other ways you might lock down the local dashboard, in our [node security
-doc](https://github.com/netdata/netdata/blob/master/docs/netdata-security.md).
+doc](https://github.com/netdata/netdata/blob/master/docs/security-and-privacy-design/README.md).
 
 > Curious about why Netdata's dashboard is open by default? Read our [blog
 > post](https://www.netdata.cloud/blog/netdata-agent-dashboard/) on that zero-configuration design decision.

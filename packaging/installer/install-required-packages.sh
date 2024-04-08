@@ -28,6 +28,7 @@ PACKAGES_UPDATE_IPSETS=${PACKAGES_UPDATE_IPSETS-0}
 PACKAGES_NETDATA_DEMO_SITE=${PACKAGES_NETDATA_DEMO_SITE-0}
 PACKAGES_NETDATA_SENSORS=${PACKAGES_NETDATA_SENSORS-0}
 PACKAGES_NETDATA_DATABASE=${PACKAGES_NETDATA_DATABASE-1}
+PACKAGES_NETDATA_STREAMING_COMPRESSION=${PACKAGES_NETDATA_STREAMING_COMPRESSION-0}
 PACKAGES_NETDATA_EBPF=${PACKAGES_NETDATA_EBPF-1}
 
 # needed commands
@@ -671,6 +672,28 @@ declare -A pkg_cmake=(
   ['default']="cmake"
 )
 
+# bison and flex are required by Fluent-Bit
+declare -A pkg_bison=(
+  ['default']="bison"
+)
+
+declare -A pkg_flex=(
+  ['default']="flex"
+)
+
+# fts-dev is required by Fluent-Bit on Alpine
+declare -A pkg_fts_dev=(
+  ['default']="NOTREQUIRED"
+  ['alpine']="musl-fts-dev" 
+  ['alpine-3.16.9']="fts-dev"
+)
+
+# cmake3 is required by Fluent-Bit on CentOS 7
+declare -A pkg_cmake3=(
+  ['default']="NOTREQUIRED"
+  ['centos-7']="cmake3"
+)
+
 declare -A pkg_json_c_dev=(
   ['alpine']="json-c-dev"
   ['arch']="json-c"
@@ -923,7 +946,7 @@ declare -A pkg_postfix=(
 )
 
 declare -A pkg_pkg_config=(
-  ['alpine']="pkgconfig"
+  ['alpine']="pkgconf"
   ['arch']="pkgconfig"
   ['centos']="pkgconfig"
   ['debian']="pkg-config"
@@ -1014,6 +1037,18 @@ declare -A pkg_lz4=(
   ['macos']="lz4"
   ['freebsd']="liblz4"
   ['default']="lz4-devel"
+)
+
+declare -A pkg_zstd=(
+  ['alpine']="zstd-dev"
+  ['debian']="libzstd-dev"
+  ['ubuntu']="libzstd-dev"
+  ['gentoo']="app-arch/zstd"
+  ['clearlinux']="zstd-devel"
+  ['arch']="zstd"
+  ['macos']="zstd"
+  ['freebsd']="zstd"
+  ['default']="libzstd-devel"
 )
 
 declare -A pkg_libuv=(
@@ -1209,6 +1244,7 @@ packages() {
   require_cmd automake || suitable_package automake
   require_cmd pkg-config || suitable_package pkg-config
   require_cmd cmake || suitable_package cmake
+  require_cmd cmake3 || suitable_package cmake3
 
   # -------------------------------------------------------------------------
   # debugging tools for development
@@ -1231,6 +1267,8 @@ packages() {
     require_cmd tar || suitable_package tar
     require_cmd curl || suitable_package curl
     require_cmd gzip || suitable_package gzip
+    require_cmd bison || suitable_package bison
+    require_cmd flex || suitable_package flex
   fi
 
   # -------------------------------------------------------------------------
@@ -1262,6 +1300,7 @@ packages() {
     suitable_package libuuid-dev
     suitable_package libmnl-dev
     suitable_package json-c-dev
+    suitable_package fts-dev
     suitable_package libyaml-dev
     suitable_package libsystemd-dev
   fi
@@ -1279,6 +1318,10 @@ packages() {
     suitable_package libuv
     suitable_package lz4
     suitable_package openssl
+  fi
+
+  if [ "${PACKAGES_NETDATA_STREAMING_COMPRESSION}" -ne 0 ]; then
+    suitable_package zstd
   fi
 
   # -------------------------------------------------------------------------
@@ -1923,6 +1966,7 @@ while [ -n "${1}" ]; do
       PACKAGES_NETDATA_SENSORS=1
       PACKAGES_NETDATA_DATABASE=1
       PACKAGES_NETDATA_EBPF=1
+      PACKAGES_NETDATA_STREAMING_COMPRESSION=1
       ;;
 
     netdata)
@@ -1930,6 +1974,7 @@ while [ -n "${1}" ]; do
       PACKAGES_NETDATA_PYTHON3=1
       PACKAGES_NETDATA_DATABASE=1
       PACKAGES_NETDATA_EBPF=1
+      PACKAGES_NETDATA_STREAMING_COMPRESSION=1
       ;;
 
     python | netdata-python)

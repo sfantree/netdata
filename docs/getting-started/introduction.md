@@ -63,7 +63,7 @@ Netdata works with tons of applications, notifications platforms, and other time
 
 - **300+ system, container, and application endpoints**: Collectors autodetect metrics from default endpoints and
     immediately visualize them into meaningful charts designed for troubleshooting. See [everything we
-    support](https://github.com/netdata/netdata/blob/master/collectors/COLLECTORS.md).
+    support](https://github.com/netdata/netdata/blob/master/src/collectors/COLLECTORS.md).
 - **20+ notification platforms**: Netdata's health watchdog sends warning and critical alerts to your [favorite
     platform](https://github.com/netdata/netdata/blob/master/docs/monitor/enable-notifications.md) to inform you of anomalies just seconds
     after they affect your node.
@@ -120,7 +120,7 @@ Here are a few ways to enrich your existing monitoring and troubleshooting stack
 ### Collect metrics from Prometheus endpoints
 
 Netdata automatically detects 600 popular endpoints and collects per-second metrics from them via the [generic
-Prometheus collector](https://github.com/netdata/go.d.plugin/blob/master/modules/prometheus/README.md). This even
+Prometheus collector](https://github.com/netdata/netdata/blob/master/src/go/collectors/go.d.plugin/modules/prometheus/README.md). This even
 includes support for Windows 10 via [`windows_exporter`](https://github.com/prometheus-community/windows_exporter).
 
 This collector is installed and enabled on all Agent installations by default, so you don't need to waste time
@@ -168,10 +168,9 @@ You can also find Netdata on:
 
 Contributions are the lifeblood of open-source projects. While we continue to invest in and improve Netdata, we need help to democratize monitoring!
 
-- Read our [Contributing Guide](https://github.com/netdata/.github/blob/main/CONTRIBUTING.md), which contains all the information you need to contribute to Netdata, such as improving our documentation, engaging in the community, and developing new features. We've made it as frictionless as possible, but if you need help, just ping us on our community forums!
-- We have a whole category dedicated to contributing and extending Netdata on our [community forums](https://community.netdata.cloud/c/agent-development/9)
+- Check our [Security Policy](https://github.com/netdata/netdata/security/policy).
 - Found a bug? Open a [GitHub issue](https://github.com/netdata/netdata/issues/new?assignees=&labels=bug%2Cneeds+triage&template=BUG_REPORT.yml&title=%5BBug%5D%3A+).
-- View our [Security Policy](https://github.com/netdata/netdata/security/policy).
+- Read our [Contributing Guide](https://github.com/netdata/.github/blob/main/CONTRIBUTING.md), which contains all the information you need to contribute to Netdata, such as improving our documentation, engaging in the community, and developing new features. We've made it as frictionless as possible, but if you need help, just ping us on our community forums!
 
 Package maintainers should read the guide on [building Netdata from source](https://github.com/netdata/netdata/blob/master/packaging/installer/methods/source.md) for
 instructions on building each Netdata component from source and preparing a package.

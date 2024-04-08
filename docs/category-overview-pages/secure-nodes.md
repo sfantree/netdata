@@ -47,7 +47,7 @@ This is the _recommended method for those who have connected their nodes to Netd
 metrics using the War Room Overview, Nodes tab, and Cloud dashboards.
 
 You can disable the local dashboard (and API) but retain the encrypted Agent-Cloud link 
-([ACLK](https://github.com/netdata/netdata/blob/master/aclk/README.md)) that
+([ACLK](https://github.com/netdata/netdata/blob/master/src/aclk/README.md)) that
 allows you to stream metrics on demand from your nodes via the Netdata Cloud interface. This change mitigates all
 concerns about revealing metrics and system design to the internet at large, while keeping all the functionality you
 need to view metrics and troubleshoot issues with Netdata Cloud.
@@ -60,7 +60,7 @@ static-threaded` setting, and change it to `none`.
     mode = none
 ```
 
-Save and close the editor, then [restart your Agent](https://github.com/netdata/netdata/blob/master/docs/configure/start-stop-restart.md) 
+Save and close the editor, then [restart your Agent](https://github.com/netdata/netdata/blob/master/packaging/installer/README.md#maintaining-a-netdata-agent-installation) 
 using `sudo systemctl
 restart netdata`. If you try to visit the local dashboard to `http://NODE:19999` again, the connection will fail because
 that node no longer serves its local dashboard.
@@ -98,7 +98,7 @@ the internet using multiple hosting providers).
 ## Fine-grained access control
 
 If you want to keep using the local dashboard, but don't want it exposed to the internet, you can restrict access with
-[access lists](https://github.com/netdata/netdata/blob/master/web/server/README.md#access-lists). This method also fully 
+[access lists](https://github.com/netdata/netdata/blob/master/src/web/server/README.md#access-lists). This method also fully 
 retains the ability to stream metrics
 on-demand through Netdata Cloud.
 
@@ -107,7 +107,7 @@ static IP, only `localhost`, or connections from behind a management LAN.
 
 By default, this setting is `localhost *`. This setting allows connections from `localhost` in addition to _all_
 connections, using the `*` wildcard. You can change this setting using Netdata's [simple
-patterns](https://github.com/netdata/netdata/blob/master/libnetdata/simple_pattern/README.md).
+patterns](https://github.com/netdata/netdata/blob/master/src/libnetdata/simple_pattern/README.md).
 
 ```conf
 [web]
@@ -134,9 +134,9 @@ The `allow connections from` setting is global and restricts access to the dashb
     allow management from = localhost
 ```
 
-See the [web server](https://github.com/netdata/netdata/blob/master/web/server/README.md#access-lists) docs for additional details
+See the [web server](https://github.com/netdata/netdata/blob/master/src/web/server/README.md#access-lists) docs for additional details
 about access lists. You can take
-access lists one step further by [enabling SSL](https://github.com/netdata/netdata/blob/master/web/server/README.md#enabling-tls-support) to encrypt data from local
+access lists one step further by [enabling SSL](https://github.com/netdata/netdata/blob/master/src/web/server/README.md#enabling-tls-support) to encrypt data from local
 dashboard in transit. The connection to Netdata Cloud is always secured with TLS.
 
 ## Use an authenticating web server in proxy mode

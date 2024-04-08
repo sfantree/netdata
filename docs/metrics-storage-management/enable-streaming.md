@@ -10,12 +10,10 @@ When one node streams metrics to another, the node receiving metrics can visuali
 [export](https://github.com/netdata/netdata/blob/master/docs/export/external-databases.md) all metrics to an external TSDB. When Netdata streams metrics to another
 Netdata, the receiving one is able to perform everything a Netdata instance is capable of.
 
-Streaming lets you decide exactly how you want to store and maintain metrics data. While we believe Netdata's
-[distributed architecture](https://github.com/netdata/netdata/blob/master/docs/store/distributed-data-architecture.md) is 
-ideal for speed and scale, streaming provides centralization options and high data availability.
+Streaming lets you decide exactly how you want to store and maintain metrics data. While we believe Netdata's distributed architecture is ideal for speed and scale, streaming provides centralization options and high data availability.
 
 This document will get you started quickly with streaming. More advanced concepts and suggested production deployments
-can be found in the [streaming and replication reference](https://github.com/netdata/netdata/blob/master/streaming/README.md).
+can be found in the [streaming and replication reference](https://github.com/netdata/netdata/blob/master/src/streaming/README.md).
 
 ## Streaming basics
 
@@ -80,7 +78,7 @@ protect them from the internet by making their UI accessible only via an nginx p
 for the parent and even each child, if necessary. 
 
 Both children and the parent are connected to the cloud, to enable infrastructure observability, 
-[without transferring the collected data](https://github.com/netdata/netdata/blob/master/docs/netdata-security.md). 
+[without transferring the collected data](https://github.com/netdata/netdata/blob/master/docs/security-and-privacy-design/README.md). 
 Requests for data are always serverd by a connected Netdata agent. When both a child and a parent are connected, 
 the cloud will always select the parent to query the user requested data.
 
@@ -114,7 +112,7 @@ itself while initiating a streaming connection. Copy that into a separate text f
 > Find out how to [install `uuidgen`](https://command-not-found.com/uuidgen) on your node if you don't already have it.
 
 Next, open `stream.conf` using [`edit-config`](https://github.com/netdata/netdata/blob/master/docs/configure/nodes.md#use-edit-config-to-edit-configuration-files)
-from within the [Netdata config directory](https://github.com/netdata/netdata/blob/master/docs/configure/nodes.md#the-netdata-config-directory).
+from within the [Netdata config directory](https://github.com/netdata/netdata/blob/master/docs/netdata-agent/configuration.md#the-netdata-config-directory).
 
 ```bash
 cd /etc/netdata
@@ -138,7 +136,7 @@ simplified version of the configuration, minus the commented lines, looks like t
 ```
 
 Save the file and close it, then restart Netdata with `sudo systemctl restart netdata`, or the [appropriate
-method](https://github.com/netdata/netdata/blob/master/docs/configure/start-stop-restart.md) for your system.
+method](https://github.com/netdata/netdata/blob/master/packaging/installer/README.md#maintaining-a-netdata-agent-installation) for your system.
 
 ### Enable streaming on the child node
 
@@ -159,7 +157,7 @@ looks like the following:
 ```
 
 Save the file and close it, then restart Netdata with `sudo systemctl restart netdata`, or the [appropriate
-method](https://github.com/netdata/netdata/blob/master/docs/configure/start-stop-restart.md) for your system.
+method](https://github.com/netdata/netdata/blob/master/packaging/installer/README.md#maintaining-a-netdata-agent-installation) for your system.
 
 ### Enable TLS/SSL on streaming (optional)
 
@@ -179,7 +177,7 @@ sudo chown netdata:netdata /etc/netdata/ssl/cert.pem /etc/netdata/ssl/key.pem
 
 Next, enforce TLS/SSL on the web server. Open `netdata.conf`, scroll down to the `[web]` section, and look for the `bind
 to` setting. Add `^SSL=force` to turn on TLS/SSL. See the [web server
-reference](https://github.com/netdata/netdata/blob/master/web/server/README.md#enabling-tls-support) for other TLS/SSL options.
+reference](https://github.com/netdata/netdata/blob/master/src/web/server/README.md#enabling-tls-support) for other TLS/SSL options.
 
 ```conf
 [web]
@@ -199,7 +197,7 @@ self-signed certificates.
 ```
 
 Restart both the parent and child nodes with `sudo systemctl restart netdata`, or the [appropriate
-method](https://github.com/netdata/netdata/blob/master/docs/configure/start-stop-restart.md) for your system, to stream encrypted metrics using TLS/SSL.
+method](https://github.com/netdata/netdata/blob/master/packaging/installer/README.md#maintaining-a-netdata-agent-installation) for your system, to stream encrypted metrics using TLS/SSL.
 
 ### View streamed metrics in Netdata Cloud
 

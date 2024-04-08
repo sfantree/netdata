@@ -30,6 +30,12 @@ include:
     test:
       ebpf-core: true
   - <<: *alpine
+    version: "3.19"
+    support_type: Core
+    notes: ''
+    eol_check: true
+    bundle_sentry: false
+  - <<: *alpine
     version: "3.18"
     support_type: Core
     notes: ''
@@ -44,17 +50,13 @@ include:
     support_type: Intermediate
     notes: ''
     eol_check: true
-  - <<: *alpine
-    version: "3.15"
-    support_type: Intermediate
-    notes: ''
-    eol_check: true
 
   - distro: archlinux
     version: latest
     support_type: Intermediate
     notes: ''
     eol_check: false
+    bundle_sentry: false
     env_prep: |
       pacman --noconfirm -Syu && pacman --noconfirm -Sy grep libffi
     test:
@@ -66,25 +68,31 @@ include:
     support_type: Core
     notes: ''
     eol_check: 'amazon-linux'
+    bundle_sentry: false
     packages: &amzn_packages
       type: rpm
       repo_distro: amazonlinux/2
       arches:
         - x86_64
         - aarch64
-    test:
+    test: &amzn_test
       ebpf-core: false
+      skip-local-build: true
   - <<: *amzn
     version: "2023"
     packages:
       <<: *amzn_packages
       repo_distro: amazonlinux/2023
+    test:
+      <<: *amzn_test
+      skip-local-build: false
 
   - distro: centos
     version: "7"
     support_type: Core
     notes: ''
     eol_check: false
+    bundle_sentry: false
     packages:
       type: rpm
       repo_distro: el/7
@@ -95,6 +103,7 @@ include:
         - x86_64
     test:
       ebpf-core: false
+      skip-local-build: true
 
   - &centos_stream
     distro: centos-stream
@@ -105,6 +114,7 @@ include:
     jsonc_removal: |
       dnf remove -y json-c-devel
     eol_check: true
+    bundle_sentry: false
     packages: &cs_packages
       type: rpm
       repo_distro: el/c9s
@@ -127,6 +137,7 @@ include:
     notes: ''
     base_image: debian:bookworm
     eol_check: true
+    bundle_sentry: true
     env_prep: |
       apt-get update
     jsonc_removal: |
@@ -144,6 +155,7 @@ include:
   - <<: *debian
     version: "11"
     base_image: debian:bullseye
+    bundle_sentry: false
     packages:
       <<: *debian_packages
       repo_distro: debian/bullseye
@@ -152,6 +164,7 @@ include:
   - <<: *debian
     version: "10"
     base_image: debian:buster
+    bundle_sentry: false
     packages:
       <<: *debian_packages
       repo_distro: debian/buster
@@ -160,25 +173,33 @@ include:
 
   - &fedora
     distro: fedora
-    version: "38"
+    version: "40"
     support_type: Core
     notes: ''
     eol_check: true
+    bundle_sentry: false
     jsonc_removal: |
       dnf remove -y json-c-devel
     packages: &fedora_packages
       type: rpm
-      repo_distro: fedora/38
+      repo_distro: fedora/40
       arches:
         - x86_64
         - aarch64
     test:
       ebpf-core: true
   - <<: *fedora
-    version: "37"
+    version: "39"
     packages:
       <<: *fedora_packages
-      repo_distro: fedora/37
+      repo_distro: fedora/39
+    test:
+      ebpf-core: true
+  - <<: *fedora
+    version: "38"
+    packages:
+      <<: *fedora_packages
+      repo_distro: fedora/38
     test:
       ebpf-core: true
 
@@ -188,6 +209,7 @@ include:
     support_type: Core
     notes: ''
     eol_check: true
+    bundle_sentry: false
     base_image: opensuse/leap:15.5
     jsonc_removal: |
       zypper rm -y libjson-c-devel
@@ -199,14 +221,6 @@ include:
         - aarch64
     test:
       ebpf-core: true
-  - <<: *opensuse
-    version: "15.4"
-    support_type: Core
-    notes: ''
-    base_image: opensuse/leap:15.4
-    packages:
-      <<: *opensuse_packages
-      repo_distro: opensuse/15.4
 
   - &oracle
     distro: oraclelinux
@@ -214,6 +228,7 @@ include:
     support_type: Core
     notes: ''
     eol_check: true
+    bundle_sentry: false
     jsonc_removal: |
       dnf remove -y json-c-devel
     packages: &oracle_packages
@@ -238,12 +253,14 @@ include:
     jsonc_removal: |
       dnf remove -y json-c-devel
     eol_check: true
+    bundle_sentry: false
     packages: &rocky_packages
       type: rpm
       repo_distro: el/9
       alt_links:
         - el/9Server
         - el/9Client
+        - el/9RedHatVirtualizationHost
       arches:
         - x86_64
         - aarch64
@@ -257,6 +274,7 @@ include:
       alt_links:
         - el/8Server
         - el/8Client
+        - el/8RedHatVirtualizationHost
 
   - &ubuntu
     distro: ubuntu
@@ -264,6 +282,7 @@ include:
     support_type: Core
     notes: ''
     eol_check: true
+    bundle_sentry: false
     env_prep: |
       rm -f /etc/apt/apt.conf.d/docker && apt-get update
     jsonc_removal: |
@@ -278,15 +297,28 @@ include:
     test:
       ebpf-core: true
   - <<: *ubuntu
-    version: "23.04"
+    version: "23.10"
     packages:
       <<: *ubuntu_packages
-      repo_distro: ubuntu/lunar
+      repo_distro: ubuntu/mantic
   - <<: *ubuntu
     version: "20.04"
     packages:
       <<: *ubuntu_packages
       repo_distro: ubuntu/focal
+legacy: # Info for platforms we used to support and still need to handle packages for
+  - <<: *fedora
+    version: "37"
+    bundle_sentry: false
+    packages:
+      <<: *fedora_packages
+      repo_distro: fedora/37
+  - <<: *opensuse
+    version: "15.4"
+    bundle_sentry: false
+    packages:
+      <<: *opensuse_packages
+      repo_distro: opensuse/15.4
 no_include: # Info for platforms not covered in CI
   - distro: docker
     version: "19.03 or newer"

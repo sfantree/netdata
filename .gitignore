@@ -18,70 +18,20 @@ Makefile.in
 .*.swp
 *.old
 *.log
+!src/collectors/log2journal/tests.d/*.log
+!src/go/collectors/**/*.log
 *.pyc
 
-Makefile
-aclocal.m4
-autom4te.cache
-compile
-config.guess
-config.h
-config.status
-config.sub
-configure
-depcomp
-install-sh
-libtool
-ltmain.sh
-missing
-stamp-h1
 netdata.spec
 sha256sums.txt
 
-# netdata binaries
-netdata
-netdatacli
-!netdata/
 upload/
 artifacts/
 
-apps.plugin
-!apps.plugin/
-
-freeipmi.plugin
-!freeipmi.plugin/
-
-cups.plugin
-!cups.plugin/
-
-nfacct.plugin
-!nfacct.plugin/
-
-xenstat.plugin
-!xenstat.plugin/
-
-perf.plugin
-!perf.plugin/
-
-slabinfo.plugin
-!slabinfo.plugin/
-
-cgroup-network
-!cgroup-network/
-
-local-listeners
-!local-listeners/
-
 ebpf.plugin
-collectors/ebpf.plugin/reset_netdata_trace.sh
+src/collectors/ebpf.plugin/reset_netdata_trace.sh
 !ebpf.plugin/
-collectors/ebpf.plugin/includes/
-
-debugfs.plugin
-!debugfs.plugin/
-
-systemd-journal.plugin
-!systemd-journal.plugin/
+src/libnetdata/ebpf/includes/
 
 # protoc generated files
 *.pb.cc
@@ -110,13 +60,13 @@ README
 TODO.md
 TODO.txt
 
-web/gui/chart-info/
-web/gui/control.html
-web/gui/dashboard.js
-web/gui/datasource.css
-web/gui/gadget.xml
-web/gui/index_new.html
-web/gui/version.txt
+src/web/gui/chart-info/
+src/web/gui/control.html
+src/web/gui/dashboard.js
+src/web/gui/datasource.css
+src/web/gui/gadget.xml
+src/web/gui/index_new.html
+src/web/gui/version.txt
 
 # related to karma/javascript/node
 /node_modules/
@@ -137,17 +87,18 @@ system/systemd/netdata-updater.service
 !system/systemd/netdata.service.in
 !system/systemd/netdata.service.*.in
 
-daemon/anonymous-statistics.sh
-daemon/get-kubernetes-labels.sh
-
-health/notifications/alarm-notify.sh
+src/health/notifications/alarm-notify.sh
 claim/netdata-claim.sh
-collectors/tc.plugin/tc-qos-helper.sh
-collectors/charts.d.plugin/charts.d.plugin
-collectors/python.d.plugin/python.d.plugin
-collectors/ioping.plugin/ioping.plugin
-collectors/go.d.plugin
-web/netdata-switch-dashboard.sh
+src/collectors/cgroups.plugin/cgroup-name.sh
+src/collectors/cgroups.plugin/cgroup-network-helper.sh
+src/collectors/tc.plugin/tc-qos-helper.sh
+src/collectors/charts.d.plugin/charts.d.plugin
+src/collectors/python.d.plugin/python.d.plugin
+src/collectors/ioping.plugin/ioping.plugin
+src/collectors/go.d.plugin
+src/web/netdata-switch-dashboard.sh
+
+src/logsmanagement/stress_test/stress_test
 
 # installer generated files
 /netdata-uninstaller.sh
@@ -169,13 +120,10 @@ compile_commands.json
 webcopylocal*
 
 # converted diagrams
-diagrams/*.png
-diagrams/*.svg
-diagrams/*.atxt
-diagrams/plantuml.jar
-
-# cppcheck
-cppcheck-build/
+docs/diagrams/*.png
+docs/diagrams/*.svg
+docs/diagrams/*.atxt
+docs/diagrams/plantuml.jar
 
 # python virtual environment
 venv/
@@ -237,11 +185,17 @@ Session.*.vim
 # Jupyter notebook checkpoints
 .ipynb_checkpoints
 
-# m4 generated ksys
-database/engine/journalfile_v2.ksy
-database/engine/journalfile_v2_virtmemb.ksy
-
 # gorilla benchmark & fuzz binaries
-libnetdata/gorilla/gorilla_benchmark
-libnetdata/gorilla/gorilla_fuzzer
-libnetdata/gorilla/fuzz-*.log
+src/libnetdata/gorilla/gorilla_benchmark
+src/libnetdata/gorilla/gorilla_fuzzer
+src/libnetdata/gorilla/fuzz-*.log
+
+# ignore build/ directory (default dir for many IDEs/LSPs)
+build/
+
+# ignore rules for go plugin code
+src/go/collectors/go.d.plugin/bin/
+src/go/collectors/go.d.plugin/mocks/springboot2/.gradle/
+src/go/collectors/go.d.plugin/mocks/tmp/*
+!src/go/collectors/go.d.plugin/mocks/tmp/.gitkeep
+src/go/collectors/go.d.plugin/vendor

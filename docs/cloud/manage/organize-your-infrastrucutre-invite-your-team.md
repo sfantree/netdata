@@ -56,7 +56,7 @@ will open a side tab in which you can:
 2. _Edit the War Rooms*_, click on the **War rooms** tab to add or remove War Rooms.
 
 3. _Connect nodes*_, click on **Nodes** tab. Copy the claiming script to your node and run it. See the
-   [connect to Cloud doc](https://github.com/netdata/netdata/blob/master/claim/README.md) for details.
+   [connect to Cloud doc](https://github.com/netdata/netdata/blob/master/src/claim/README.md) for details.
 
 4. _Manage the users*_, click on **Users**.
    The [invitation doc](#invite-your-team)
@@ -106,7 +106,7 @@ We recommend a few strategies for organizing your War Rooms.
 
 - **Incident response**  
   You can also create new War Rooms as one of the first steps in your incident response process.
-   For example, you have a user-facing web app that relies on Apache Pulsar for a message queue, and one of your nodes using the [Pulsar collector](https://github.com/netdata/go.d.plugin/blob/master/modules/pulsar/README.md) begins reporting a suspiciously low messages rate.
+   For example, you have a user-facing web app that relies on Apache Pulsar for a message queue, and one of your nodes using the [Pulsar collector](https://github.com/netdata/netdata/blob/master/src/go/collectors/go.d.plugin/modules/pulsar/README.md) begins reporting a suspiciously low messages rate.
    You can create a War Room called `$year-$month-$day-pulsar-rate`, add all your Pulsar nodes in addition to nodes they connect to, and begin diagnosing the root cause in a War Room optimized for getting to resolution as fast as possible.
 
 ### Add War Rooms
@@ -128,7 +128,7 @@ Click on the gear icon of the War Room's name in the top of the page to do that.
 2. To **include an existing node** to a War Room or **connect a new node\*** click on **Nodes** tab. Choose any connected node you want to add to this War Room by clicking on the checkbox next to its hostname, then click **+ Add** at the top of the panel.
 
 3. To **add existing users to a War Room**, click on **Add Users**.
-   See our [invite doc](#invite-your-team.md) for details on inviting new users to your Space in Netdata Cloud.
+   See our [invite section](#invite-your-team) for details on inviting new users to your Space in Netdata Cloud.
 
 > #### Note
 >

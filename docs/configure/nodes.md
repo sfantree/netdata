@@ -31,20 +31,20 @@ these files in your own Netdata config directory, as the next section describes 
 exist.
 
 - `netdata.conf` is the main configuration file. This is where you'll find most configuration options. Read descriptions
-  for each in the [daemon config](https://github.com/netdata/netdata/blob/master/daemon/config/README.md) doc.
+  for each in the [daemon config](https://github.com/netdata/netdata/blob/master/src/daemon/config/README.md) doc.
 - `edit-config` is a shell script used for [editing configuration files](#use-edit-config-to-edit-configuration-files).
 - Various configuration files ending in `.conf` for [configuring plugins or
-  collectors](https://github.com/netdata/netdata/blob/master/collectors/REFERENCE.md) behave. Examples: `go.d.conf`,
+  collectors](https://github.com/netdata/netdata/blob/master/src/collectors/REFERENCE.md) behave. Examples: `go.d.conf`,
   `python.d.conf`, and `ebpf.d.conf`.
 - Various directories ending in `.d`, which contain other configuration files, each ending in `.conf`, for [configuring
-  specific collectors](https://github.com/netdata/netdata/blob/master/collectors/REFERENCE.md).
+  specific collectors](https://github.com/netdata/netdata/blob/master/src/collectors/REFERENCE.md).
 - `apps_groups.conf` is a configuration file for changing how applications/processes are grouped when viewing the
-  **Application** charts from [`apps.plugin`](https://github.com/netdata/netdata/blob/master/collectors/apps.plugin/README.md) or
-  [`ebpf.plugin`](https://github.com/netdata/netdata/blob/master/collectors/ebpf.plugin/README.md).
-- `health.d/` is a directory that contains [health configuration files](https://github.com/netdata/netdata/blob/master/health/REFERENCE.md).
+  **Application** charts from [`apps.plugin`](https://github.com/netdata/netdata/blob/master/src/collectors/apps.plugin/README.md) or
+  [`ebpf.plugin`](https://github.com/netdata/netdata/blob/master/src/collectors/ebpf.plugin/README.md).
+- `health.d/` is a directory that contains [health configuration files](https://github.com/netdata/netdata/blob/master/src/health/REFERENCE.md).
 - `health_alarm_notify.conf` enables and configures [alert notifications](https://github.com/netdata/netdata/blob/master/docs/monitor/enable-notifications.md).
-- `statsd.d/` is a directory for configuring Netdata's [statsd collector](https://github.com/netdata/netdata/blob/master/collectors/statsd.plugin/README.md).
-- `stream.conf` configures [parent-child streaming](https://github.com/netdata/netdata/blob/master/streaming/README.md) between separate nodes running the Agent.
+- `statsd.d/` is a directory for configuring Netdata's [statsd collector](https://github.com/netdata/netdata/blob/master/src/collectors/statsd.plugin/README.md).
+- `stream.conf` configures [parent-child streaming](https://github.com/netdata/netdata/blob/master/src/streaming/README.md) between separate nodes running the Agent.
 - `.environment` is a hidden file that describes the environment in which the Netdata Agent is installed, including the
   `PATH` and any installation options. Useful for [reinstalling](https://github.com/netdata/netdata/blob/master/packaging/installer/REINSTALL.md) or
   [uninstalling](https://github.com/netdata/netdata/blob/master/packaging/installer/UNINSTALL.md) the Agent.
@@ -98,7 +98,7 @@ method for `edit-config` to write into the config directory. Use your `$EDITOR`,
 > defaulted to `vim` or `nano`. Use `export EDITOR=` to change this temporarily, or edit your shell configuration file
 > to change to permanently.
 
-After you make your changes, you need to [restart the Agent](https://github.com/netdata/netdata/blob/master/docs/configure/start-stop-restart.md) with `sudo systemctl
+After you make your changes, you need to [restart the Agent](https://github.com/netdata/netdata/blob/master/packaging/installer/README.md#maintaining-a-netdata-agent-installation) with `sudo systemctl
 restart netdata` or the appropriate method for your system.
 
 Here's an example of editing the node's hostname, which appears in both the local dashboard and in Netdata Cloud.

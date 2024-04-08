@@ -10,7 +10,7 @@ nodes running the Netdata Agent. A node is any system in your infrastructure tha
 physical or virtual machine (VM), container, cloud deployment, or edge/IoT device.
 
 The Netdata Agent uses zero-configuration collectors to gather metrics from every application and container instantly,
-and uses Netdata's [distributed data architecture](https://github.com/netdata/netdata/blob/master/docs/store/distributed-data-architecture.md) to store metrics
+and uses Netdata's distributed data architecture to store metrics
 locally. Without a slow and troublesome centralized data lake for your infrastructure's metrics, you reduce the
 resources you need to invest in, and the complexity of, monitoring your infrastructure.
 
@@ -99,8 +99,7 @@ Both the Overview and the Nodes tab offer easy access to **single-node dashboard
 single-node dashboards in Netdata Cloud to drill down on specific issues, scrub backward in time to investigate
 historical data, and see like metrics presented meaningfully to help you troubleshoot performance problems.
 
-Read about the process in the [infrastructure
-overview](https://github.com/netdata/netdata/blob/master/docs/visualize/overview-infrastructure.md#drill-down-with-single-node-dashboards) doc, then learn about [interacting with
+Learn more about [interacting with
 dashboards and charts](https://github.com/netdata/netdata/blob/master/docs/cloud/visualize/interact-new-charts.md) to get the most from all of Netdata's real-time
 metrics.
 
@@ -143,17 +142,17 @@ sudo ./edit-config netdata.conf
 Our [configuration basics doc](https://github.com/netdata/netdata/blob/master/docs/configure/nodes.md) contains more information about `netdata.conf`, `edit-config`,
 along with simple examples to get you familiar with editing your node's configuration.
 
-After you've learned the basics, you should [secure your infrastructure's nodes](https://github.com/netdata/netdata/blob/master/docs/netdata-security.md) using
+After you've learned the basics, you should [secure your infrastructure's nodes](https://github.com/netdata/netdata/blob/master/docs/security-and-privacy-design/README.md) using
 one of our recommended methods. These security best practices ensure no untrusted parties gain access to the metrics
 collected on any of your nodes.
 
 ### Collect metrics from systems and applications
 
-Netdata has [300+ pre-installed collectors](https://github.com/netdata/netdata/blob/master/collectors/COLLECTORS.md) that gather thousands of metrics with zero
+Netdata has [300+ pre-installed collectors](https://github.com/netdata/netdata/blob/master/src/collectors/COLLECTORS.md) that gather thousands of metrics with zero
 configuration. Collectors search each of your nodes in default locations and ports to find running applications and
 gather as many metrics as they can without you having to configure them individually.
 
-Most collectors work without configuration, should you want more info, you can read more on [how Netdata's metrics collectors work](https://github.com/netdata/netdata/blob/master/collectors/README.md) and the [Collectors configuration reference](https://github.com/netdata/netdata/blob/master/collectors/REFERENCE.md) documentation.
+Most collectors work without configuration, should you want more info, you can read more on [how Netdata's metrics collectors work](https://github.com/netdata/netdata/blob/master/src/collectors/README.md) and the [Collectors configuration reference](https://github.com/netdata/netdata/blob/master/src/collectors/REFERENCE.md) documentation.
 
 In addition, find detailed information about which [system](https://github.com/netdata/netdata/blob/master/docs/collect/system-metrics.md),
 [container](https://github.com/netdata/netdata/blob/master/docs/collect/container-metrics.md), and [application](https://github.com/netdata/netdata/blob/master/docs/collect/application-metrics.md) metrics you can
@@ -220,7 +219,7 @@ collect from across your infrastructure with Netdata.
   - [Events Feed](https://github.com/netdata/netdata/blob/master/docs/cloud/insights/events-feed.md)
 - Management and settings
   - [Sign in with email, Google, or GitHub](https://github.com/netdata/netdata/blob/master/docs/cloud/manage/sign-in.md)
-  - [Invite your team](hhttps://github.com/netdata/netdata/blob/master/docs/cloud/manage/organize-your-infrastrucutre-invite-your-team.md#invite-your-team)
+  - [Invite your team](https://github.com/netdata/netdata/blob/master/docs/cloud/manage/organize-your-infrastrucutre-invite-your-team.md#invite-your-team)
   - [Choose your Netdata Cloud theme](https://github.com/netdata/netdata/blob/master/docs/cloud/manage/themes.md)
   - [Role-Based Access](https://github.com/netdata/netdata/blob/master/docs/cloud/manage/role-based-access.md)
   - [Paid Plans](https://github.com/netdata/netdata/blob/master/docs/cloud/manage/plans.md)

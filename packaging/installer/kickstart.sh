@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
-# Next unused error code: F0515
+# Next unused error code: F0517
 
 # ======================================================================
 # Constants
@@ -21,10 +21,10 @@ KICKSTART_SOURCE="$(
 )"
 DEFAULT_PLUGIN_PACKAGES=""
 PATH="${PATH}:/usr/local/bin:/usr/local/sbin"
-REPOCONFIG_DEB_VERSION="2-1"
-REPOCONFIG_RPM_VERSION="2-1"
+REPOCONFIG_DEB_VERSION="2-2"
+REPOCONFIG_RPM_VERSION="2-2"
 START_TIME="$(date +%s)"
-STATIC_INSTALL_ARCHES="x86_64 armv7l aarch64 ppc64le"
+STATIC_INSTALL_ARCHES="x86_64 armv7l armv6l aarch64 ppc64le"
 
 # ======================================================================
 # URLs used throughout the script
@@ -38,6 +38,7 @@ FORUM_URL="https://community.netdata.cloud/"
 INSTALL_DOC_URL="https://learn.netdata.cloud/docs/install-the-netdata-agent/one-line-installer-for-all-linux-systems"
 PACKAGES_SCRIPT="https://raw.githubusercontent.com/netdata/netdata/master/packaging/installer/install-required-packages.sh"
 PUBLIC_CLOUD_URL="https://app.netdata.cloud"
+RELEASE_INFO_URL="https://repo.netdata.cloud/releases"
 REPOCONFIG_DEB_URL_PREFIX="https://repo.netdata.cloud/repos/repoconfig"
 REPOCONFIG_RPM_URL_PREFIX="https://repo.netdata.cloud/repos/repoconfig"
 TELEMETRY_URL="https://us-east1-netdata-analytics-bi.cloudfunctions.net/ingest_agent_events"
@@ -124,6 +125,7 @@ main() {
       ;;
   esac
 
+  handle_existing_install
   set_tmpdir
 
   if [ -n "${INSTALL_VERSION}" ]; then
@@ -401,6 +403,9 @@ support_list() {
 }
 
 success_banner() {
+  printf >&2 "%s\n" "To view your system's real-time performance metrics, open your web browser and enter http://NODE:19999."
+  printf >&2 "%s\n\n" "Replace NODE with the IP address or hostname of your Netdata server to access the dashboard."
+
   printf >&2 "%s\n\n" "Official documentation can be found online at ${DOCS_URL}."
 
   if [ -z "${CLAIM_TOKEN}" ]; then
@@ -529,11 +534,15 @@ run_script() {
   # shellcheck disable=SC2086
   run ${ROOTCMD} "${@}"
 
+  ret="$?"
+
   if [ -r "${NETDATA_SCRIPT_STATUS_PATH}" ]; then
     # shellcheck disable=SC1090
     . "${NETDATA_SCRIPT_STATUS_PATH}"
     rm -f "${NETDATA_SCRIPT_STATUS_PATH}"
   fi
+
+  return "${ret}"
 }
 
 warning() {
@@ -590,6 +599,8 @@ check_for_remote_file() {
 
   if echo "${url}" | grep -Eq "^file:///"; then
     [ -e "${url#file://}" ] || return 1
+  elif [ -n "${NETDATA_ASSUME_REMOTE_FILES_ARE_PRESENT}" ]; then
+    return 0
   elif [ -n "${CURL}" ]; then
     "${CURL}" --output /dev/null --silent --head --fail "${url}" || return 1
   elif command -v wget > /dev/null 2>&1; then
@@ -614,13 +625,29 @@ download() {
   fi
 }
 
+get_actual_version() {
+    major="${1}"
+    channel="${2}"
+    url="${RELEASE_INFO_URL}/${channel}/${major}"
+
+    if check_for_remote_file "${RELEASE_INFO_URL}"; then
+        if check_for_remote_file "${url}"; then
+            download "${url}" -
+        else
+            echo "NONE"
+        fi
+    else
+        echo ""
+    fi
+}
+
 get_redirect() {
   url="${1}"
 
   if [ -n "${CURL}" ]; then
-    run sh -c "${CURL} ${url} -s -L -I -o /dev/null -w '%{url_effective}' | grep -o '[^/]*$'" || return 1
+    run sh -c "${CURL} ${url} -s -L -I -o /dev/null -w '%{url_effective}' | grep -Eo '[^/]+$'" || return 1
   elif command -v wget > /dev/null 2>&1; then
-    run sh -c "wget -S -O /dev/null ${url} 2>&1 | grep -m 1 Location | grep -o '[^/]*$'" || return 1
+    run sh -c "wget -S -O /dev/null ${url} 2>&1 | grep -m 1 Location | grep -Eo '[^/]+$'" || return 1
   else
     fatal "${ERROR_F0003}" F0003
   fi
@@ -1308,7 +1335,7 @@ netdata_avail_check() {
       ;;
     centos|fedora|ol|amzn)
       # shellcheck disable=SC2086
-      ${pm_cmd} search --nogpgcheck -v netdata | grep -qE 'Repo *: netdata(-edge)?$'
+      LC_ALL=C ${pm_cmd} search --nogpgcheck -v netdata | grep -qE 'Repo *: netdata(-edge)?$'
       return $?
       ;;
     opensuse)
@@ -1321,26 +1348,30 @@ netdata_avail_check() {
 
 # Check for any distro-specific dependencies we know we need.
 check_special_native_deps() {
-  if [ "${DISTRO_COMPAT_NAME}" = "centos" ] && [ "${SYSVERSION}" = "7" ]; then
-    progress "Checking for libuv availability."
-    if ${pm_cmd} search --nogpgcheck -v libuv | grep -q "No matches found"; then
-      progress "libuv not found, checking for EPEL availability."
-      if ${pm_cmd} search --nogpgcheck -v epel-release | grep -q "No matches found"; then
-        warning "Unable to find a suitable source for libuv, cannot install using native packages on this system."
-        return 1
-      else
-        progress "EPEL is available, attempting to install so that required dependencies are available."
+  if [ "${DISTRO_COMPAT_NAME}" = "centos" ] && [ "${SYSVERSION}" -gt 6 ]; then
+    progress "EPEL is required on this system, checking if it’s available."
 
-        # shellcheck disable=SC2086
-        if ! run_as_root env ${env} ${pm_cmd} ${install_subcmd} ${pkg_install_opts} epel-release; then
-          warning "Failed to install EPEL, even though it is required to install native packages on this system."
-          return 1
-        fi
-      fi
+    if LC_ALL=C ${pm_cmd} search --nogpgcheck -v epel-release | grep -q "No matches found"; then
+      warning "Unable to find a suitable source for libuv, cannot install using native packages on this system."
+      return 1
     else
-      return 0
+      progress "EPEL is available, attempting to install so that required dependencies are available."
+
+      # shellcheck disable=SC2086
+      if ! run_as_root env ${env} ${pm_cmd} ${install_subcmd} ${pkg_install_opts} epel-release; then
+        warning "Failed to install EPEL, even though it is required to install native packages on this system."
+        return 1
+      fi
     fi
   fi
+}
+
+cleanup_apt_cache() {
+    cache_dir="/var/cache/apt/archives"
+
+    if [ -d "${cache_dir}" ]; then
+        run_as_root find "${cache_dir}" -type f -name 'netdata*.deb' -delete
+    fi
 }
 
 common_rpm_opts() {
@@ -1409,6 +1440,7 @@ try_package_install() {
         install_subcmd="install"
       fi
       needs_early_refresh=1
+      needs_apt_cache_cleanup=1
       pm_cmd="apt-get"
       repo_subcmd="update"
       pkg_type="deb"
@@ -1483,15 +1515,21 @@ try_package_install() {
     deb)
       repoconfig_file="${repoconfig_name}${pkg_vsep}${REPOCONFIG_DEB_VERSION}${pkg_suffix}.${pkg_type}"
       repoconfig_url="${REPOCONFIG_DEB_URL_PREFIX}/${repo_prefix}/${repoconfig_file}"
+      ref_check_url="${REPOCONFIG_DEB_URL_PREFIX}"
       ;;
     rpm)
       repoconfig_file="${repoconfig_name}${pkg_vsep}${REPOCONFIG_RPM_VERSION}${pkg_suffix}.${pkg_type}"
       repoconfig_url="${REPOCONFIG_RPM_URL_PREFIX}/${repo_prefix}/${SYSARCH}/${repoconfig_file}"
+      ref_check_url="${REPOCONFIG_RPM_URL_PREFIX}"
       ;;
   esac
 
   if ! pkg_installed "${repoconfig_name}"; then
     progress "Checking for availability of repository configuration package."
+    if ! check_for_remote_file "${ref_check_url}"; then
+      NETDATA_ASSUME_REMOTE_FILES_ARE_PRESENT=1
+    fi
+
     if ! check_for_remote_file "${repoconfig_url}"; then
       warning "No repository configuration package available for ${DISTRO} ${SYSVERSION}. Cannot install native packages on this system."
       return 2
@@ -1506,6 +1544,10 @@ try_package_install() {
       if ! run_as_root env ${env} ${pm_cmd} ${repo_subcmd} ${repo_update_opts}; then
         warning "${failed_refresh_msg}"
         return 2
+      fi
+
+      if [ -n "${needs_apt_cache_cleanup}" ]; then
+        cleanup_apt_cache
       fi
     fi
 
@@ -1630,6 +1672,10 @@ try_static_install() {
     progress "Attempting to install using static build..."
   fi
 
+  if ! check_for_remote_file "${NETDATA_TARBALL_BASEURL}"; then
+    NETDATA_ASSUME_REMOTE_FILES_ARE_PRESENT=1
+  fi
+
   # Check status code first, so that we can provide nicer fallback for dry runs.
   if check_for_remote_file "${NETDATA_STATIC_ARCHIVE_URL}"; then
     netdata_agent="${NETDATA_STATIC_ARCHIVE_NAME}"
@@ -1637,7 +1683,7 @@ try_static_install() {
     netdata_agent="${NETDATA_STATIC_ARCHIVE_OLD_NAME}"
     export NETDATA_STATIC_ARCHIVE_URL="${NETDATA_STATIC_ARCHIVE_OLD_URL}"
   else
-    warning "There is no static build available for ${SYSARCH} CPUs. This usually means we simply do not currently provide static builds for ${SYSARCH} CPUs."
+    warning "Could not find a ${SELECTED_RELEASE_CHANNEL} static build for ${SYSARCH} CPUs. This usually means there is some networking issue preventing access to https://github.com/ from this system."
     return 2
   fi
 
@@ -1737,8 +1783,14 @@ install_local_build_dependencies() {
   fi
 
   # shellcheck disable=SC2086
-  if ! run_as_root "${bash}" "${tmpdir}/install-required-packages.sh" ${opts} netdata; then
-    warning "Failed to install all required packages, but installation might still be possible."
+  if [ "$(uname -s)" = "Darwin" ]; then
+    if ! run "${bash}" "${tmpdir}/install-required-packages.sh" ${opts} netdata; then
+      warning "Failed to install all required packages, but installation might still be possible."
+    fi
+  else
+    if ! run_as_root "${bash}" "${tmpdir}/install-required-packages.sh" ${opts} netdata; then
+      warning "Failed to install all required packages, but installation might still be possible."
+    fi
   fi
 }
 
@@ -1862,13 +1914,21 @@ prepare_offline_install_source() {
     static|'')
       set_static_archive_urls "${SELECTED_RELEASE_CHANNEL}" "x86_64"
 
+      if ! check_for_remote_file "${NETDATA_TARBALL_BASEURL}"; then
+        NETDATA_ASSUME_REMOTE_FILES_ARE_PRESENT=1
+      fi
+
       if check_for_remote_file "${NETDATA_STATIC_ARCHIVE_URL}"; then
         for arch in ${STATIC_INSTALL_ARCHES}; do
           set_static_archive_urls "${SELECTED_RELEASE_CHANNEL}" "${arch}"
 
-          progress "Fetching ${NETDATA_STATIC_ARCHIVE_URL}"
-          if ! download "${NETDATA_STATIC_ARCHIVE_URL}" "netdata-${arch}-latest.gz.run"; then
-            warning "Failed to download static installer archive for ${arch}. ${BADNET_MSG}."
+          if check_for_remote_file "${NETDATA_STATIC_ARCH_URL}"; then
+            progress "Fetching ${NETDATA_STATIC_ARCHIVE_URL}"
+            if ! download "${NETDATA_STATIC_ARCHIVE_URL}" "netdata-${arch}-latest.gz.run"; then
+                warning "Failed to download static installer archive for ${arch}. ${BADNET_MSG}."
+            fi
+          else
+            progress "Skipping ${NETDATA_STATIC_ARCHIVE_URL} as it does not exist on the server."
           fi
         done
         legacy=0
@@ -1880,6 +1940,10 @@ prepare_offline_install_source() {
         if ! download "${NETDATA_STATIC_ARCHIVE_OLD_URL}" "netdata-x86_64-latest.gz.run"; then
           warning "Failed to download static installer archive for x86_64. ${BADNET_MSG}."
         fi
+      fi
+
+      if ! find . -name '*.gz.run'; then
+        fatal "Did not actually download any static installer archives, cannot continue. ${BADNET_MSG}." F0516
       fi
 
       progress "Fetching ${NETDATA_STATIC_ARCHIVE_CHECKSUM_URL}"
@@ -2025,6 +2089,40 @@ install_on_freebsd() {
 # ======================================================================
 # Argument parsing code
 
+handle_major_version() {
+  CONTINUE_INSTALL_PROMPT="Attempting to install will use the latest version available overall. Do you wish to continue the install?"
+
+  if [ -z "${INSTALL_MAJOR_VERSION}" ]; then
+    return
+  fi
+
+  actual_version="$(get_actual_version "v${INSTALL_MAJOR_VERSION}" "${RELEASE_CHANNEL}")"
+
+  if [ -z "${actual_version}" ]; then
+    if [ "${INTERACTIVE}" -eq 0 ]; then
+      fatal "Could not determine the lastest releaase in channel '${RELEASE_CHANNEL}' with major version '${INSTALL_MAJOR_VERSION}'" F0517
+    else
+      if confirm "Unable to determine the correct version to install for major version '${INSTALL_MAJOR_VERSION}'. ${CONTINUE_INSTALL_PROMPT}"; then
+        progress "User requested continuing the install with the latest version."
+      else
+        fatal "Cancelling installation at user request." F0518
+      fi
+    fi
+  elif [ "${actual_version}" = 'NONE' ]; then
+    if [ "${INTERACTIVE}" -eq 0 ]; then
+      warning "No releases with major version '${INSTALL_MAJOR_VERSION}' have been published. Continuing the install with the latest version instead."
+    else
+      if confirm "No releases with major version '${INSTALL_MAJOR_VERSION}' have been published. ${CONTINUE_INSTALL_PROMPT}"; then
+        progress "User requested continuing the install with the latest version."
+      else
+        fatal "Cancelling installation at user request." F0519
+      fi
+    fi
+  else
+    INSTALL_VERSION="${actual_version}"
+  fi
+}
+
 validate_args() {
   check_claim_opts
 
@@ -2056,22 +2154,6 @@ validate_args() {
     esac
   fi
 
-  if [ -n "${NETDATA_OFFLINE_INSTALL_SOURCE}" ] && [ -n "${INSTALL_VERSION}" ]; then
-      fatal "Specifying an install version alongside an offline install source is not supported." F050A
-  fi
-
-  if [ "${NETDATA_AUTO_UPDATES}" = "default" ]; then
-    if [ -n "${NETDATA_OFFLINE_INSTALL_SOURCE}" ] || [ -n "${INSTALL_VERSION}" ]; then
-      AUTO_UPDATE=0
-    else
-      AUTO_UPDATE=1
-    fi
-  elif [ "${NETDATA_AUTO_UPDATES}" = 1 ]; then
-    AUTO_UPDATE=1
-  else
-    AUTO_UPDATE=0
-  fi
-
   if [ "${RELEASE_CHANNEL}" = "default" ]; then
     if [ -n "${NETDATA_OFFLINE_INSTALL_SOURCE}" ]; then
       SELECTED_RELEASE_CHANNEL="$(cat "${NETDATA_OFFLINE_INSTALL_SOURCE}/channel")"
@@ -2088,6 +2170,31 @@ validate_args() {
     fi
 
     SELECTED_RELEASE_CHANNEL="${RELEASE_CHANNEL}"
+  fi
+
+  if [ -n "${INSTALL_MAJOR_VERSION}" ] && [ -n "${INSTALL_VERSION}" ]; then
+    fatal "Only one of --install-version or --install-major-version may be specified." F0515
+  fi
+
+  handle_major_version # Appropriately updates INSTALL_VERSION if INSTALL_MAJOR_VERSION is set.
+
+  if [ -n "${NETDATA_OFFLINE_INSTALL_SOURCE}" ] && [ -n "${INSTALL_VERSION}" ]; then
+      fatal "Specifying an install version alongside an offline install source is not supported." F050A
+  fi
+
+  if [ "${NETDATA_AUTO_UPDATES}" = "default" ]; then
+    if [ -n "${NETDATA_OFFLINE_INSTALL_SOURCE}" ] || [ -n "${INSTALL_VERSION}" ]; then
+      AUTO_UPDATE=0
+    else
+      AUTO_UPDATE=1
+    fi
+  elif [ "${NETDATA_INSTALL_MAJOR_VERSION}" ]; then
+    warning "Forcibly disabling auto updates as a specific major version was requested."
+    AUTO_UPDATE=0
+  elif [ "${NETDATA_AUTO_UPDATES}" = 1 ]; then
+    AUTO_UPDATE=1
+  else
+    AUTO_UPDATE=0
   fi
 }
 
@@ -2134,7 +2241,7 @@ parse_args() {
       "--claim-only") set_action 'claim' ;;
       "--no-updates") NETDATA_AUTO_UPDATES=0 ;;
       "--auto-update") NETDATA_AUTO_UPDATES="1" ;;
-      "--auto-update-method")
+      "--auto-update-type"|"--auto-update-method")
         NETDATA_AUTO_UPDATE_TYPE="$(echo "${2}" | tr '[:upper:]' '[:lower:]')"
         case "${NETDATA_AUTO_UPDATE_TYPE}" in
           systemd|interval|crontab) shift 1 ;;
@@ -2166,6 +2273,10 @@ parse_args() {
         ;;
       "--old-install-prefix")
         OLD_INSTALL_PREFIX="${2}"
+        shift 1
+        ;;
+      "--install-major-version")
+        INSTALL_MAJOR_VERSION="${2}"
         shift 1
         ;;
       "--install-version")
@@ -2264,9 +2375,5 @@ parse_args $@
 confirm_root_support
 get_system_info
 confirm_install_prefix
-
-if [ -z "${ACTION}" ]; then
-  handle_existing_install
-fi
 
 main

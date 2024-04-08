@@ -46,11 +46,15 @@ Additionally, the following build time features require additional dependencies:
 ## Preparing the source tree
 
 Certain features in Netdata require custom versions of specific libraries,
-which the the build system will link statically into Netdata. These
+which the build system will link statically into Netdata. These
 libraries and their header files must be copied into specific locations
 in the source tree to be used.
 
+Before you begin, make sure that your repo and the repo's submodules are clean from any previous builds and up to date.
+Otherwise, [perform a cleanup](https://github.com/netdata/netdata/blob/master/packaging/installer/methods/manual.md#perform-a-cleanup-in-your-netdata-repo)
+
 ### Netdata cloud
+
 #### JSON-C
 
 Netdata requires the use of JSON-C for JSON parsing when using Netdata

@@ -1,7 +1,7 @@
 # Change how long Netdata stores metrics
 
 The Netdata Agent uses a custom made time-series database (TSDB), named the 
-[`dbengine`](https://github.com/netdata/netdata/blob/master/database/engine/README.md), to store metrics.
+[`dbengine`](https://github.com/netdata/netdata/blob/master/src/database/engine/README.md), to store metrics.
 
 To see the number of metrics stored and the retention in days per tier, use the `/api/v1/dbengine_stats` endpoint. 
 
@@ -38,7 +38,7 @@ on the maximum retention and the memory used by Netdata is described in detail, 
 ```
 
 The default "update every iterations" of 60 means that if a metric is collected per second in Tier 0, then
-we will have a data point every minute in tier 1 and every minute in tier 2. 
+we will have a data point every minute in tier 1 and every hour in tier 2. 
 
 Up to 5 tiers are supported. You may add, or remove tiers and/or modify these multipliers, as long as the 
 product of all the "update every iterations" does not exceed 65535 (number of points for each tier0 point).
@@ -84,7 +84,7 @@ The DBENGINE memory is related to the number of metrics concurrently being colle
 on disk in relation with the queries running, and the number of metrics for which retention is maintained.
 
 The precise analysis of how much memory will be used by the DBENGINE itself is described in 
-[DBENGINE memory requirements](https://github.com/netdata/netdata/blob/master/database/engine/README.md#memory-requirements).
+[DBENGINE memory requirements](https://github.com/netdata/netdata/blob/master/src/database/engine/README.md#memory-requirements).
 
 In addition to the DBENGINE, Netdata uses memory for contexts, metric labels (e.g. in a Kubernetes setup), 
 other Netdata structures/processes (e.g. Health) and system overhead.
@@ -160,7 +160,7 @@ Once you have decided how to size each tier, open `netdata.conf` with
 and make your changes in the `[db]` subsection. 
 
 Save the file and restart the Agent with `sudo systemctl restart netdata`, or
-the [appropriate method](https://github.com/netdata/netdata/blob/master/docs/configure/start-stop-restart.md) 
+the [appropriate method](https://github.com/netdata/netdata/blob/master/packaging/installer/README.md#maintaining-a-netdata-agent-installation) 
 for your system, to change the database engine's size.
 
 ## Scaling dedicated parent nodes

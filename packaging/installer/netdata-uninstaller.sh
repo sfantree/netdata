@@ -520,6 +520,15 @@ portable_del_user_from_group() {
   groupname="${1}"
   username="${2}"
 
+  if command -v getent > /dev/null 2>&1; then
+    getent group "${1:-""}" | grep -q "${2}"
+  else
+    grep "^${1}:" /etc/group | grep -q "${2}"
+  fi
+
+  ret=$?
+  [ "${ret}" != "0" ] && return 0
+
   # username is not in group
   info "Deleting ${username} user from ${groupname} group ..."
 
@@ -731,6 +740,7 @@ rm_file /etc/init.d/netdata
 rm_file /etc/periodic/daily/netdata-updater
 rm_file /etc/cron.daily/netdata-updater
 rm_file /etc/cron.d/netdata-updater
+rm_file /etc/cron.d/netdata-updater-daily
 
 
 if [ -n "${NETDATA_PREFIX}" ] && [ -d "${NETDATA_PREFIX}" ] && [ "netdata" = "$(basename "$NETDATA_PREFIX")" ] ; then
@@ -738,9 +748,11 @@ if [ -n "${NETDATA_PREFIX}" ] && [ -d "${NETDATA_PREFIX}" ] && [ "netdata" = "$(
 else
   rm_file "${NETDATA_PREFIX}/usr/sbin/netdata"
   rm_file "${NETDATA_PREFIX}/usr/sbin/netdatacli"
+  rm_file "${NETDATA_PREFIX}/usr/sbin/netdata-claim.sh"
+  rm_file "${NETDATA_PREFIX}/usr/sbin/log2journal"
+  rm_file "${NETDATA_PREFIX}/usr/sbin/systemd-cat-native"
   rm_file "/tmp/netdata-ipc"
   rm_file "/tmp/netdata-service-cmds"
-  rm_file "${NETDATA_PREFIX}/usr/sbin/netdata-claim.sh"
   rm_dir "${NETDATA_PREFIX}/usr/share/netdata"
   rm_dir "${NETDATA_PREFIX}/usr/libexec/netdata"
   rm_dir "${NETDATA_PREFIX}/var/lib/netdata"
@@ -755,18 +767,15 @@ fi
 
 FILE_REMOVAL_STATUS=1
 
-#### REMOVE NETDATA USER FROM ADDED GROUPS
-if [ -n "$NETDATA_ADDED_TO_GROUPS" ]; then
+#### REMOVE USER
+if user_input "Do you want to delete 'netdata' system user ? "; then
+  portable_del_user "netdata" || :
+elif [ -n "$NETDATA_ADDED_TO_GROUPS" ]; then
   if user_input "Do you want to delete 'netdata' from following groups: '$NETDATA_ADDED_TO_GROUPS' ? "; then
     for group in $NETDATA_ADDED_TO_GROUPS; do
       portable_del_user_from_group "${group}" "netdata"
     done
   fi
-fi
-
-#### REMOVE USER
-if user_input "Do you want to delete 'netdata' system user ? "; then
-  portable_del_user "netdata" || :
 fi
 
 ### REMOVE GROUP

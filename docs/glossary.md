@@ -15,13 +15,13 @@ Use the alphabatized list below to find the answer to your single-term questions
 
 - [**Agent** or **Netdata Agent**](https://github.com/netdata/netdata/blob/master/packaging/installer/README.md): Netdata's distributed monitoring Agent collects thousands of metrics from systems, hardware, and applications with zero configuration. It runs permanently on all your physical/virtual servers, containers, cloud deployments, and edge/IoT devices.
 
-- [**Agent-cloud link** or **ACLK**](https://github.com/netdata/netdata/blob/master/aclk/README.md): The Agent-Cloud link (ACLK) is the mechanism responsible for securely connecting a Netdata Agent to your web browser through Netdata Cloud.
+- [**Agent-cloud link** or **ACLK**](https://github.com/netdata/netdata/blob/master/src/aclk/README.md): The Agent-Cloud link (ACLK) is the mechanism responsible for securely connecting a Netdata Agent to your web browser through Netdata Cloud.
 
 - [**Aggregate Function**](https://github.com/netdata/netdata/blob/master/docs/cloud/visualize/interact-new-charts.md#aggregate-functions-over-time): A function applied When the granularity of the data collected is higher than the plotted points on the chart.
 
 - [**Alerts** (formerly **Alarms**)](https://github.com/netdata/netdata/blob/master/docs/cloud/alerts-notifications/notifications.md): With the information that appears on Netdata Cloud and the local dashboard about active alerts, you can configure alerts to match your infrastructure's needs or your team's goals.
 
-- [**Alarm Entity Type**](https://github.com/netdata/netdata/blob/master/health/REFERENCE.md#health-entity-reference): Entity types that are attached to specific charts and use the `alarm` label.
+- [**Alarm Entity Type**](https://github.com/netdata/netdata/blob/master/src/health/REFERENCE.md#health-entity-reference): Entity types that are attached to specific charts and use the `alarm` label.
 
 - [**Anomaly Advisor**](https://github.com/netdata/netdata/blob/master/docs/cloud/insights/anomaly-advisor.md): A Netdata feature that lets you quickly surface potentially anomalous metrics and charts related to a particular highlight window of interest.
 
@@ -33,9 +33,9 @@ Use the alphabatized list below to find the answer to your single-term questions
 
 - [**Child**](https://github.com/netdata/netdata/blob/master/docs/metrics-storage-management/enable-streaming.md#streaming-basics): A node, running Netdata, that streams metric data to one or more parent.
 
-- [**Cloud** or **Netdata Cloud**](https://github.com/netdata/netdata/blob/master/docs/quickstart/infrastructure.md): Netdata Cloud is a web application that gives you real-time visibility for your entire infrastructure. With Netdata Cloud, you can view key metrics, insightful charts, and active alerts from all your nodes in a single web interface.
+- [**Cloud** or **Netdata Cloud**](https://github.com/netdata/netdata/blob/master/docs/netdata-cloud/README.md): Netdata Cloud is a web application that gives you real-time visibility for your entire infrastructure. With Netdata Cloud, you can view key metrics, insightful charts, and active alerts from all your nodes in a single web interface.
 
-- [**Collector**](https://github.com/netdata/netdata/blob/master/collectors/README.md#collector-architecture-and-terminology): A catch-all term for any Netdata process that gathers metrics from an endpoint.
+- [**Collector**](https://github.com/netdata/netdata/blob/master/src/collectors/README.md#collector-architecture-and-terminology): A catch-all term for any Netdata process that gathers metrics from an endpoint.
 
 - [**Community**](https://community.netdata.cloud/): As a company with a passion and genesis in open-source, we are not just very proud of our community, but we consider our users, fans, and chatters to be an imperative part of the Netdata experience and culture.
 
@@ -43,7 +43,7 @@ Use the alphabatized list below to find the answer to your single-term questions
 
 - [**Context**](https://github.com/netdata/netdata/blob/master/docs/cloud/visualize/interact-new-charts.md#contexts): A way of grouping charts by the types of metrics collected and dimensions displayed. It's kind of like a machine-readable naming and organization scheme.
 
-- [**Custom dashboards**](https://github.com/netdata/netdata/blob/master/web/gui/custom/README.md) A dashboard that you can create using simple HTML (no javascript is required for basic dashboards).
+- [**Custom dashboards**](https://github.com/netdata/netdata/blob/master/src/web/gui/custom/README.md) A dashboard that you can create using simple HTML (no javascript is required for basic dashboards).
 
 ## D
 
@@ -53,11 +53,9 @@ Use the alphabatized list below to find the answer to your single-term questions
 
 - [**Dimension**](https://github.com/netdata/netdata/blob/master/docs/cloud/visualize/interact-new-charts.md#dimensions): A dimension is a value that gets shown on a chart.
 
-- [**Distributed Architecture**](https://github.com/netdata/netdata/blob/master/docs/store/distributed-data-architecture.md): The data architecture mindset with which Netdata was built, where all data are collected and stored on the edge, whenever it's possible, creating countless benefits.
-
 ## E
 
-- [**External Plugins**](https://github.com/netdata/netdata/blob/master/collectors/plugins.d/README.md): These gather metrics from external processes, such as a webserver or database, and run as independent processes that communicate with the Netdata daemon via pipes.
+- [**External Plugins**](https://github.com/netdata/netdata/blob/master/src/collectors/plugins.d/README.md): These gather metrics from external processes, such as a webserver or database, and run as independent processes that communicate with the Netdata daemon via pipes.
 
 ## F
 
@@ -77,15 +75,15 @@ Use the alphabatized list below to find the answer to your single-term questions
 
 - [**Headless Collector Streaming**](https://github.com/netdata/netdata/blob/master/docs/metrics-storage-management/enable-streaming.md#supported-streaming-configurations): Streaming configuration where child `A`, _without_ a database or web dashboard, streams metrics to parent `B`.
 
-- [**Health Configuration Files**](https://github.com/netdata/netdata/blob/master/health/REFERENCE.md#edit-health-configuration-files): Files that you can edit to configure your Agent's health watchdog service.
+- [**Health Configuration Files**](https://github.com/netdata/netdata/blob/master/src/health/REFERENCE.md#edit-health-configuration-files): Files that you can edit to configure your Agent's health watchdog service.
 
-- [**Health Entity Reference**](https://github.com/netdata/netdata/blob/master/health/REFERENCE.md#health-entity-reference):
+- [**Health Entity Reference**](https://github.com/netdata/netdata/blob/master/src/health/REFERENCE.md#health-entity-reference):
 
 - [**Home** tab](https://github.com/netdata/netdata/blob/master/docs/cloud/visualize/overview.md#home): Tab in Netdata Cloud that provides a predefined dashboard of relevant information about entities in the War Room.
 
 ## I
 
-- [**Internal plugins**](https://github.com/netdata/netdata/blob/master/collectors/README.md#collector-architecture-and-terminology): These gather metrics from `/proc`, `/sys`, and other Linux kernel sources. They are written in `C` and run as threads within the Netdata daemon.
+- [**Internal plugins**](https://github.com/netdata/netdata/blob/master/src/collectors/README.md#collector-architecture-and-terminology): These gather metrics from `/proc`, `/sys`, and other Linux kernel sources. They are written in `C` and run as threads within the Netdata daemon.
 
 ## K
 
@@ -95,7 +93,7 @@ Use the alphabatized list below to find the answer to your single-term questions
 
 ## M
 
-- [**Metrics Collection**](https://github.com/netdata/netdata/blob/master/collectors/README.md):  With zero configuration, Netdata auto-detects thousands of data sources upon starting and immediately collects per-second metrics. Netdata can immediately collect metrics from these endpoints thanks to 300+ collectors, which all come pre-installed when you install Netdata.
+- [**Metrics Collection**](https://github.com/netdata/netdata/blob/master/src/collectors/README.md):  With zero configuration, Netdata auto-detects thousands of data sources upon starting and immediately collects per-second metrics. Netdata can immediately collect metrics from these endpoints thanks to 300+ collectors, which all come pre-installed when you install Netdata.
 
 - [**Metric Correlations**](https://github.com/netdata/netdata/blob/master/docs/cloud/insights/metric-correlations.md): A Netdata feature that lets you quickly find metrics and charts related to a particular window of interest that you want to explore further.
 
@@ -105,7 +103,7 @@ Use the alphabatized list below to find the answer to your single-term questions
 
 - [**Metrics Streaming Replication**](https://github.com/netdata/netdata/blob/master/docs/metrics-storage-management/enable-streaming.md): Each node running Netdata can stream the metrics it collects, in real time, to another node. Metric streaming allows you to replicate metrics data across multiple nodes, or centralize all your metrics data into a single time-series database (TSDB).
 
-- [**Module**](https://github.com/netdata/netdata/blob/master/collectors/REFERENCE.md#enable-and-disable-a-specific-collection-module): A type of collector.
+- [**Module**](https://github.com/netdata/netdata/blob/master/src/collectors/REFERENCE.md#enable-and-disable-a-specific-collection-module): A type of collector.
 
 ## N
 
@@ -114,7 +112,7 @@ metrics, troubleshoot complex performance problems, and make data interoperable 
 
 - [**Netdata Agent** or **Agent**](https://github.com/netdata/netdata/blob/master/packaging/installer/README.md): Netdata's distributed monitoring Agent collects thousands of metrics from systems, hardware, and applications with zero configuration. It runs permanently on all your physical/virtual servers, containers, cloud deployments, and edge/IoT devices.
 
-- [**Netdata Cloud** or **Cloud**](https://github.com/netdata/netdata/blob/master/docs/quickstart/infrastructure.md): Netdata Cloud is a web application that gives you real-time visibility for your entire infrastructure. With Netdata Cloud, you can view key metrics, insightful charts, and active alerts from all your nodes in a single web interface.
+- [**Netdata Cloud** or **Cloud**](https://github.com/netdata/netdata/blob/master/docs/netdata-cloud/README.md): Netdata Cloud is a web application that gives you real-time visibility for your entire infrastructure. With Netdata Cloud, you can view key metrics, insightful charts, and active alerts from all your nodes in a single web interface.
 
 - [**Netdata Functions** or **Functions**](https://github.com/netdata/netdata/blob/master/docs/cloud/netdata-functions.md): Routines exposed by a collector on the Netdata Agent that can  bring additional information to support troubleshooting or trigger some action to happen on the node itself.
 
@@ -128,7 +126,7 @@ metrics, troubleshoot complex performance problems, and make data interoperable 
 
 - [**Obsoletion**(of nodes)](https://github.com/netdata/netdata/blob/master/docs/cloud/manage/organize-your-infrastrucutre-invite-your-team.md#obsoleting-offline-nodes-from-a-space): Removing nodes from a space.
 
-- [**Orchestrators**](https://github.com/netdata/netdata/blob/master/collectors/README.md#collector-architecture-and-terminology): External plugins that run and manage one or more modules. They run as independent processes.
+- [**Orchestrators**](https://github.com/netdata/netdata/blob/master/src/collectors/README.md#collector-architecture-and-terminology): External plugins that run and manage one or more modules. They run as independent processes.
 
 - [**Overview** tab](https://github.com/netdata/netdata/blob/master/docs/cloud/visualize/overview.md#overview-and-single-node-view): Tab in Netdata Cloud that uses composite charts. These charts display real-time aggregated metrics from all the nodes (or a filtered selection) in a given War Room.
 
@@ -142,9 +140,9 @@ metrics, troubleshoot complex performance problems, and make data interoperable 
 
 ## R
 
-- [**Registry**](https://github.com/netdata/netdata/blob/master/registry/README.md): Registry that allows Netdata to provide unified cross-server dashboards.
+- [**Registry**](https://github.com/netdata/netdata/blob/master/src/registry/README.md): Registry that allows Netdata to provide unified cross-server dashboards.
 
-- [**Replication Streaming**](https://github.com/netdata/netdata/blob/master/streaming/README.md): Streaming configuration where child `A`, _with_ a database and web dashboard, streams metrics to parent `B`.
+- [**Replication Streaming**](https://github.com/netdata/netdata/blob/master/src/streaming/README.md): Streaming configuration where child `A`, _with_ a database and web dashboard, streams metrics to parent `B`.
 
 - [**Room** or **War Room**](https://github.com/netdata/netdata/blob/master/docs/cloud/manage/organize-your-infrastrucutre-invite-your-team.md#netdata-cloud-war-rooms): War Rooms organize your connected nodes and provide infrastructure-wide dashboards using real-time metrics and visualizations.
 
@@ -158,9 +156,9 @@ metrics, troubleshoot complex performance problems, and make data interoperable 
 
 ## T
 
-- [**Template Entity Type**](https://github.com/netdata/netdata/blob/master/health/REFERENCE.md#entity-types): Entity type that defines rules that apply to all charts of a specific context, and use the template label. Templates help you apply one entity to all disks, all network interfaces, all MySQL databases, and so on.
+- [**Template Entity Type**](https://github.com/netdata/netdata/blob/master/src/health/REFERENCE.md#entity-types): Entity type that defines rules that apply to all charts of a specific context, and use the template label. Templates help you apply one entity to all disks, all network interfaces, all MySQL databases, and so on.
 
-- [**Tiers**](https://github.com/netdata/netdata/blob/master/database/engine/README.md#tiers): Tiering is a mechanism of providing multiple tiers of data with different granularity of metrics (the frequency they are collected and stored, i.e. their resolution).
+- [**Tiers**](https://github.com/netdata/netdata/blob/master/src/database/engine/README.md#tiers): Tiering is a mechanism of providing multiple tiers of data with different granularity of metrics (the frequency they are collected and stored, i.e. their resolution).
 
 ## U
 
